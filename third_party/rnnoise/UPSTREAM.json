@@ -1,0 +1,29 @@
+{
+  "url": "https://github.com/xiph/rnnoise",
+  "tag": "v0.1.1",
+  "commit": "6cbfd53eb348a8d394e0757b4025c6ded34eb2b6",
+  "modifications": "None; build configuration outside this directory",
+  "sha256": {
+    "AUTHORS": "ae8f426951c50df22b7403312b475abe50baef1bef62bbcf2978346acb3d103a",
+    "COPYING": "0bb95d752b966f69fea022227297ad49fdb4464eb45f1c1fff494a435bfbeaa5",
+    "README": "6a21984b8fcfda09c614f6b48c30c394dd002bb11a0be8abafa256164e89209d",
+    "include/rnnoise.h": "cefb431725c1f7fdd9e7fbb5db0a8bdb3ff0f4ac0db01858731999a2543136ee",
+    "src/arch.h": "322c51649a7491af6f07c33a37f7438353d0028a1d9cca5030c683f3e9212efd",
+    "src/celt_lpc.c": "3b48d753f31e89830de0872c6842800002a4a73086ade112e6affc8d8665752e",
+    "src/celt_lpc.h": "27a9950190aa5028d0ca796b4a9f12bc4c04d11591435471f167eb0e45e60d56",
+    "src/common.h": "fa5d43359973261066dbdfc14b24f3cdf5b63dc024f51b7ec5564c8408cc471d",
+    "src/denoise.c": "d456cf9021d5c5d8f5299961904450274c53a485a56d76057fde682431dc83a0",
+    "src/kiss_fft.c": "95c9170e21fc2e10cab3607708c6c647ac5f5f7c7013e6b3792c7ecc53546049",
+    "src/kiss_fft.h": "9dd9bb35ad2043e7e6a91048ffaf0aa8f8d71ab6fbb67a0736b76786e4652436",
+    "src/opus_types.h": "38d99313f07d74e5a01b165e6b41642d98cb2af00604ab681afd695da26cc86a",
+    "src/pitch.c": "efde9f6371697bb9625329e0ef6a8de4f9d4ec322180dcef1beff765193cf073",
+    "src/pitch.h": "8d93b3abdfd01ca3fc04d437245d51d2fc2c2461c786a76334b618453c974e63",
+    "src/rnn.c": "8b35f29e4c13e9f9e66dc40ba8f9440fbb25809d766263627d8d308d78166f1d",
+    "src/rnn.h": "1d64ab6350bd3daec4f8d20f7b145a3ac13e9699fdf6d4cc38788dd4b2e0ff03",
+    "src/rnn_data.c": "63476f37a6cbac1202344671fa2a33bfdbccde78e23ecb9f29baa430b66f27a4",
+    "src/rnn_data.h": "68f7a0c3d400fc06256e72a7eaefabec3d17064bcaf36c1ff815bd1d88dd0409",
+    "src/rnn_reader.c": "6c4f7e4030dbf7ebc9b58d1081788c475e706e5e070321569fdc5bea17d0dae2",
+    "src/tansig_table.h": "f469ef2388605ed0b687b1e69ec1b19a0ed59d3abd6e4c70612014ad78642873",
+    "src/_kiss_fft_guts.h": "43578f37345e81b12b269865c83bde93b0b2a5bccb3a1e2acafb7542b9e0ed9a"
+  }
+}
