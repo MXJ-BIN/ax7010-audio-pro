@@ -1,7 +1,7 @@
 param(
  [Parameter(Mandatory=$true)][string]$InputFile,
  [switch]$NoPlay,
- [string]$Python='C:/Users/BIN/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe'
+ [string]$Python="C:/Users/t'x/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe"
 )
 $ErrorActionPreference='Stop'
 $InputFile=[IO.Path]::GetFullPath($InputFile)

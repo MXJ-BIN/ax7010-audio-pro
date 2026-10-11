@@ -3,7 +3,7 @@ setlocal
 chcp 65001 >nul
 set PYTHONIOENCODING=utf-8
 set JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
-call D:\AMDDesignTools\2026.1\Vitis\settings64.bat
+call "C:\AMDDesignTools26.1\2026.1\Vitis\settings64.bat"
 cd /d "%~dp0.."
 if not exist build mkdir build
 call vitis -s scripts/create_vitis.py > build\vitis_build.log 2>&1

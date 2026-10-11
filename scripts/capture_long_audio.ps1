@@ -3,7 +3,7 @@ param(
  [ValidateRange(1,2061)][int]$Seconds=10,
  [switch]$Max,
  [string]$Output=(Join-Path $PSScriptRoot ('../captures/long_'+(Get-Date -Format 'yyyyMMdd_HHmmss')+'.wav')),
- [string]$Python='C:/Users/BIN/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe'
+ [string]$Python="C:/Users/t'x/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe"
 )
 $ErrorActionPreference='Stop'
 $recordSeconds=if($Max){2062}else{$Seconds}

@@ -1,6 +1,6 @@
 if {[catch {
 set origin [file normalize [file join [file dirname [info script]] ..]]
-set handle [open D:/ax7010-audio-pro-vitis/last_workspace.txt r]
+set handle [open [file join $origin build vitis last_workspace.txt] r]
 set ws [string trim [read $handle]]
 close $handle
 set bit [file join $origin build project ax7010_pro.runs impl_1 audio_ps_wrapper.bit]

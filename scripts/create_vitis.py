@@ -5,7 +5,7 @@ import vitis
 origin = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 src_xsa = os.path.join(origin, "build", "audio_fourmic.xsa")
 # Vitis 2026 rejects project paths that contain spaces.
-root = r"D:\ax7010-audio-pro-vitis"
+root = os.path.join(origin, "build", "vitis")
 from datetime import datetime
 ws = os.path.join(root, "workspaces", datetime.now().strftime("%Y%m%d_%H%M%S"))
 xsa = os.path.join(root, "audio_ps_wrapper.xsa")

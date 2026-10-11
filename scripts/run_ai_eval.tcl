@@ -7,7 +7,7 @@ set rc [catch {
  if {$frames < 1 || $frames > 12001 || [file size $input] != $frames*960} {error "Invalid input length"}
  foreach path [list $output $result "$output.part"] {if {[file exists $path]} {error "Output exists: $path"}}
  set origin [file normalize [file join [file dirname [info script]] ..]]
- set f [open D:/ax7010-audio-pro-vitis/last_workspace.txt r];set ws [string trim [read $f]];close $f
+ set f [open [file join $origin build vitis last_workspace.txt] r];set ws [string trim [read $f]];close $f
  set bit [file join $origin build project ax7010_pro.runs impl_1 audio_ps_wrapper.bit]
  set production_elf [file join $ws doa_uart build doa_uart.elf]
  set init [file join $ws audio_plat export audio_plat hw sdt ps7_init.tcl]
