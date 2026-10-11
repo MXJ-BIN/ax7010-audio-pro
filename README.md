@@ -1,6 +1,32 @@
 # AX7010 AUDIO PRO：四麦定向拾音增强版
 
+v1.1.0
+
 面向 AX7010 / xc7z010clg400-1，Vivado / Vitis 2026.1。独立于已上板验证的 `../ax7010-audio-fourmic`，保留原版作为回退。当前语音滤波版已完成仿真、实现和上板控制／10 秒录音验证；用户已确认频带处理的噪声效果更好；另新增 PS 离线 AI 推理与录音试听工具。详细状态见 `build/verification.md`，源代码与产物哈希见 `build/manifest.json`。
+
+
+## 2026-10-07 DOA GCC-PHAT 源码更新
+
+默认 DOA 已由普通互相关升级为**实际参与延迟输出的 GCC-PHAT**。真实参数沿用 48828.125 Hz、50 mm 正方形、512 点；理论最大 TDOA 为 7.118 点，保留 ±8 搜索。新核依次处理四路 FFT、四条阵列边的 PHAT/IFFT，显示 FFT 独立运行，16 柱频谱功能不改动。
+
+- PHAT 使用定点 max+0.5min 幅值近似、epsilon 与 14 周期串行除法；屏蔽 DC/极弱频谱，输出 Q14。
+- 保留原去直流/带通、Q4 三点抛物线、四麦 atan2 坐标和中值/IIR 跟踪；DOA 在 band_valid 消费四路滤波结果。
+- 修复双缓冲超时覆盖计算帧的问题；能量、峰高、旁瓣与峰均值比不足时 invalid，原始和跟踪方向保持。
+- 十三项主回归全部通过（FOURMIC_TEST_PASS）；28 组算法测试、四档预处理链路、连续采样与故意超时保护通过；整数 0/±1/±3/±7 点正确，半采样、幅度差、噪声/反射通过；静音、低能量、纯直流和 11 组纯噪声均拒绝。Q4 是输出格点，接近最大延迟的 7.125 点混合输入实际估计 7.0 点，详见报告。
+- DOA 模块综合资源 LUT 1707、FF 710、BRAM36 5、DSP 13；50 MHz 模块布局布线 WNS +7.234 ns；非静音计算约 2.38 ms，帧采集加计算约 12.86 ms。
+
+完整 [A–G 架构、问题、修改、定点格式、逐组测试与资源报告](docs/doa_gcc_phat.md)。Vivado TCL 可执行 source scripts/test_doa_gcc.tcl，日志/CSV/DCP 在 build/doa_gcc；主回归已纳入新测试。原时域实现保留于 rtl/doa_time_domain.v，显式 GCC_PHAT=0 可回归。
+
+**本次为 RTL 与独立 DOA 模块验证，尚未重新生成、发布或下载 bit/XSA/ELF（不用修改，似乎可以运行原来的），也未进行真实房间 GCC-PHAT 精度测试。**
+
+**本次更新还加入了AGENTS.md文档，这是agent应该遵守的约定。同时新增了整个项目的逻辑梳理文件[PROJECT_LOGIC.md](C:/ax7010_audio_pro/ax7010-audio-pro/PROJECT_LOGIC.md)，这不应该是项目最后想要的，但是可以看一看。**
+
+## 📚 项目文档
+
+- [AGENTS.md](./AGENTS.md)
+- [PROJECT_LOGIC.md](./PROJECT_LOGIC.md)
+
+**下方的历史上板记录对应旧发布固件。**
 
 ## 新增功能
 
@@ -9,7 +35,7 @@
 - 四路同步可切换语音带通：语音 150–6000 Hz、抗风 300–4000 Hz、窄带 300–3400 Hz；作用于方向估计和波束成形之前，使用复用乘法器，直接在 PL 实现。
 - 平滑噪声门、可开关 AGC、音量与静音；麦克风增益和输出调理器的削顶提示。
 - 720p HDMI：四路电平、原始方向和拾音目标、数字目标角度、模式状态、录音状态、16 柱频谱。
-- 512 点硬件 FFT 用于显示，复用乘法器；16 个频率点约 95–6104 Hz，相对对数幅值，不是校准后的 dB 测量。当前没有窗函数，也没有基于 FFT 的降噪或 GCC-PHAT。
+- 512 点硬件 FFT 用于显示，复用乘法器；16 个频率点约 95–6104 Hz，相对对数幅值，不是校准后的 dB 测量。显示 FFT 保持独立；2026-10-07 源码新增独立 DOA GCC-PHAT FFT/IFFT 核。仍没有窗函数或基于 FFT 的实时音频降噪。
 - 保留 0.671 秒 BRAM 短录音；新增连续环形采集到 384 MiB DDR，双通道对比录音最大约 34 分 21.6 秒，JTAG 导出带 CRC 校验的 WAV，无需额外存储外设。
 
 默认启用语音档滤波和方向平滑，噪声门阈值改为 32；噪声门、AGC、混响和静音默认关闭。原有四分之一音量保留，新增音量默认单位增益。噪声门用于停顿时压低背景声；当前实时链路由滤波和阵列波束处理；PS AI 离线录音处理见下文。
@@ -33,11 +59,25 @@ VDD 接 J11 Pin39/40 的 3.3V，GND/LR 接公共地 Pin1/37/38。
 - PCM5102A：BCK=Pin5，LRCK=Pin6，DATA=Pin7，GND=公共地，供电沿用已验证接法。
 - HDMI 接现有 SANC 显示器；输出 1280×720，实际刷新率略低于 60 Hz。实际音频采样率 48828.125 Hz。
 
+## 后续硬件修改与配套产物规则（2026-10-07）
+
+以后每次修改先核对：**AXI 地址、寄存器数量/定义、DMA、BRAM 接口、中断、时钟、PS-PL 接口、IP Block Design**。任一项变化，必须完整执行：
+
+1. 更新硬件连接、参数/约束及对应 PS 软件，完成 RTL 编译和相关仿真。
+2. 更新 Vivado 工程/IP，重建受影响 OOC 检查点，全工程综合、实现并通过 setup/hold 时序检查。
+3. 生成新 **bit**，导出包含该 bit 的新 **XSA**。
+4. 使用该 XSA 更新/重建 Vitis 平台和 BSP，生成配套新 **ELF**，不默认复用旧 ELF。
+5. 核对三份产物一致性，更新本 README 的接口变化、验证、产物路径/版本和上板状态；失败时明确记录原因，不能用旧产物冒充本次构建。
+
+对应现有脚本顺序：需要更新工程时运行 scripts/create_project.bat → scripts/build_bitstream.bat → scripts/create_vitis.bat。生成产物不等于已下载；下载/运行按当次任务授权执行。此规则同时保存在 [AGENTS.md](AGENTS.md)，供后续工程修改遵循。
+
+本次 GCC-PHAT 修改检查：上述 PS/AXI 接口及 Block Design 均未变化；新增 DOA 内部 RAM 不改变 PS 可访问的录音 BRAM 接口，因此未触发接口变更后的 bit/XSA/ELF 重建。当前 GCC-PHAT 是已通过验证的源码版本，既有发布固件仍为旧算法；要在板上使用新算法，需要生成并下载新的匹配固件。
+
 ## 构建与下载
 
 逐步运行，每步成功后再运行下一步；不要同时运行多个脚本。
 
-1. `scripts/run_sim.bat`：十一项核心仿真（含连续录音环形缓存），再运行 `scripts/test_speech_band.bat`：四路滤波逐样本和频响检查。
+1. `scripts/run_sim.bat`：十三项核心仿真（含 GCC-PHAT、三档滤波联合测试和连续录音环形缓存），再运行 `scripts/test_speech_band.bat`：四路滤波逐样本和频响检查。
 2. `scripts/create_project.bat`：生成增强版 BD，包含自定义 AXI 控制器。
 3. `scripts/build_bitstream.bat`：综合、实现、时序检查和 XSA 导出。
 4. `scripts/create_vitis.bat`：生成匹配的 PS 裸机程序。

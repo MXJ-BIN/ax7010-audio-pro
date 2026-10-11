@@ -51,7 +51,7 @@ module audio_top(input wire pl_clk_50m,key1_n,key2_n,key3_n,
  wire band_valid,band_clip,band_overrun;
  wire [1:0] band_mode=override?ps_options[29:28]:2'd1;
  speech_band voice_band(clk,rst,en,clear_clip,band_mode,c0,c1,c2,c3,v0,v1,v2,v3,band_valid,band_clip,band_overrun);
- doa_square doa(clk,rst,en,v0[23:8],v1[23:8],v2[23:8],v3[23:8],lx,ly,valid,update,quality,frame_seq,overrun);
+ doa_square doa(clk,rst,band_valid,v0[23:8],v1[23:8],v2[23:8],v3[23:8],lx,ly,valid,update,quality,frame_seq,overrun);
  direction_track tracker(clk,rst,update,valid,smooth_on,ps_options[26:24],lx,ly,track_x,track_y,accepted);
  beamformer bf(clk,rst,en,v0,v1,v2,v3,target_x,target_y,beam);
  fx_stereo fx(clk,rst,en,eq_on,rev_on,beam_on?beam:v0,beam_on?beam:v1,fxl,fxr);

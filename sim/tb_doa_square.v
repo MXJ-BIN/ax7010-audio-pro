@@ -3,7 +3,7 @@ module tb_doa_square;
  reg clk=0,rst=1,en=0;always #10 clk=~clk;
  reg signed [15:0] m0=0,m1=0,m2=0,m3=0;
  wire signed [8:0] x,y;wire valid,update,overrun;wire [4:0] quality;wire [7:0] seq;
- doa_square #(.FRAME(64),.MAX_LAG(8),.ENERGY_MIN(100000)) dut(clk,rst,en,m0,m1,m2,m3,x,y,valid,update,quality,seq,overrun);
+ doa_square #(.GCC_PHAT(0),.FRAME(64),.MAX_LAG(8),.ENERGY_MIN(100000)) dut(clk,rst,en,m0,m1,m2,m3,x,y,valid,update,quality,seq,overrun);
  reg signed [15:0] data[0:255];integer i,k;
  reg [31:0] lfsr=32'h76543210;
  task feed(input integer a,b,c,d,input integer silent);

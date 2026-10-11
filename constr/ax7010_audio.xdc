@@ -36,6 +36,16 @@ set_property PACKAGE_PIN G19 [get_ports mic2_sd]
 set_property PACKAGE_PIN H18 [get_ports mic3_sd]
 set_property IOSTANDARD LVCMOS33 [get_ports {mic2_sd mic3_sd}]
 
+# External audio pins are synchronous to the PL clock at the board boundary.
+# Use explicit board-level budgets so check_timing does not leave these paths
+# unconstrained. Tighten these values when measured pin-to-pin timing is known.
+set_input_delay  -clock pl_clk_50m -max 0.000 [get_ports {mic0_sd mic1_sd mic2_sd mic3_sd}]
+set_input_delay  -clock pl_clk_50m -min 0.000 [get_ports {mic0_sd mic1_sd mic2_sd mic3_sd}]
+set_output_delay -clock pl_clk_50m -max 0.000 [get_ports {i2s_bclk i2s_lrck i2s_dac_sd}]
+set_output_delay -clock pl_clk_50m -min 0.000 [get_ports {i2s_bclk i2s_lrck i2s_dac_sd}]
+set_output_delay -clock pl_clk_50m -max 0.000 [get_ports {led_n[*]}]
+set_output_delay -clock pl_clk_50m -min 0.000 [get_ports {led_n[*]}]
+
 set_property PACKAGE_PIN N18 [get_ports hdmi_clk_p]
 set_property PACKAGE_PIN V20 [get_ports {hdmi_d_p[0]}]
 set_property PACKAGE_PIN T20 [get_ports {hdmi_d_p[1]}]
