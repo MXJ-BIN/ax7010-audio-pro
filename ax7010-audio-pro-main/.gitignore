@@ -1,0 +1,9 @@
+build/
+.Xil/
+*.log
+*.jou
+*.str
+captures/
+__pycache__/
+.agents/hooks.json
+.cursor/hooks.json

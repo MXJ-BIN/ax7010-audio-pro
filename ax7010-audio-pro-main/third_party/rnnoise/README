@@ -1,0 +1,29 @@
+RNNoise 是一个基于循环神经网络的噪声抑制库。
+以下论文介绍了该算法：
+
+J.-M. Valin，《结合 DSP 与深度学习的实时全频带语音增强方法》
+（A Hybrid DSP/Deep Learning Approach to Real-Time Full-Band Speech Enhancement），
+IEEE 多媒体信号处理（MMSP）研讨会论文集，arXiv:1709.08243，2018 年。
+https://arxiv.org/pdf/1709.08243.pdf
+
+交互式演示地址：https://jmvalin.ca/demo/rnnoise/
+
+编译时，只需输入：
+% ./autogen.sh
+% ./configure
+% make
+
+如需安装，可执行：
+% make install
+
+RNNoise 主要作为库使用，同时提供了一个简单的命令行工具作为示例。
+该工具处理采样率为 48 kHz 的单声道、16 位原始 PCM 文件（RAW 格式，
+使用本机字节序）。用法如下：
+
+./examples/rnnoise_demo <含噪语音输入文件> <降噪输出文件>
+
+输出同样是 16 位原始 PCM 文件。
+
+最新版本的源代码可从以下地址获取：
+https://gitlab.xiph.org/xiph/rnnoise
+GitHub 仓库是为方便访问而提供的副本。
