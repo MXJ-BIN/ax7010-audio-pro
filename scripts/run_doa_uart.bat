@@ -1,6 +1,6 @@
 @echo off
 setlocal
-call D:\AMDDesignTools\2026.1\Vitis\settings64.bat
+call "C:\AMDDesignTools26.1\2026.1\Vitis\settings64.bat"
 cd /d "%~dp0.."
 if not exist build mkdir build
 call xsdb scripts/run_doa_uart.tcl %* > build\download.log 2>&1

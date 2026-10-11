@@ -1,4 +1,4 @@
-exec xvlog -sv D:/AMDDesignTools/2026.1/Vivado/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv
+exec xvlog -sv [file join $::env(XILINX_VIVADO) data ip xpm xpm_memory hdl xpm_memory.sv]
 exec xvlog -sv ../../rtl/audio_spectrum.v ../../sim/tb_audio_spectrum.v
 exec xelab tb_audio_spectrum -snapshot tb_audio_spectrum
 set result [exec xsim tb_audio_spectrum -R]

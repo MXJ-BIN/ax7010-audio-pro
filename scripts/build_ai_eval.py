@@ -3,11 +3,20 @@ from pathlib import Path
 import subprocess
 import json
 import hashlib
+import os
+import shutil
 root=Path(__file__).resolve().parent.parent
-out=root/'build/ai_eval';out.mkdir(exist_ok=True)
-ws=Path(Path('D:/ax7010-audio-pro-vitis/last_workspace.txt').read_text().strip())
+out=root/'build/ai_eval';out.mkdir(parents=True, exist_ok=True)
+workspace_file=root/'build/vitis/last_workspace.txt'
+if not workspace_file.is_file():
+ raise SystemExit('Missing Vitis workspace; run create_vitis.bat successfully first')
+ws=Path(workspace_file.read_text(encoding='utf-8').strip())
 bsp=ws/'audio_plat/export/audio_plat/sw/standalone_ps7'
-gcc=Path('D:/AMDDesignTools/2026.1/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc.exe')
+gcc=Path(os.environ.get('AX7010_ARM_GCC') or shutil.which('arm-none-eabi-gcc') or
+ 'C:/AMDDesignTools26.1/2026.1/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc.exe')
+if not gcc.is_file():
+ raise SystemExit('ARM compiler not found: '+str(gcc)+
+  '; install the Vitis Cortex-A9 toolchain or set AX7010_ARM_GCC to arm-none-eabi-gcc.exe')
 linker=(ws/'doa_uart/src/lscript.ld').read_text()
 if 'LENGTH = 0x06f00000' not in linker: raise RuntimeError('DDR recording reservation missing')
 linker=linker.replace('_STACK_SIZE : 0x2000','_STACK_SIZE : 0x40000').replace('_HEAP_SIZE : 0x2000','_HEAP_SIZE : 0x100000')
